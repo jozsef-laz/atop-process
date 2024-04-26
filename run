@@ -1,2 +1,3 @@
 #! /bin/bash
-atop -PCPU -r alma.raw | python process.py
+ROOT_DIR=$(git rev-parse --show-toplevel)
+atopcat ir*/alma.raw | atop -r - -P CPU | python $ROOT_DIR/process.py
