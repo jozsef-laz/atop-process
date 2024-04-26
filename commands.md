@@ -4,6 +4,11 @@ time /ir_test/tools/bld_linux/bin/fsstress --config /ir_test/tools/bld_linux/fil
 purefs snap --send --target irp871-c77 hedgehog
 ```
 
+checking on target whether the snapshot arrived
+```
+while true; do date; purefs list --snap --transfer; sleep 1; done
+```
+
 in cmux:
 ```
 cmux -na
