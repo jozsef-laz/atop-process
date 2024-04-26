@@ -1,0 +1,16 @@
+set datafile separator ","
+set terminal png
+set xlabel "time (sec)"
+set ylabel "ticks spent in calls (of an interval of 5 sec)"
+
+set output "no-throttling.png"
+p "result-no-thr-no-enc.csv" u 1:2 w line title "no enc, sys", \
+   "result-no-thr-no-enc.csv" u 1:3 w line title "no enc, user", \
+   "result-no-thr-ENC.csv" u 1:2 w line title "ENC, sys", \
+   "result-no-thr-ENC.csv" u 1:3 w line title "ENC, user"
+
+set output "throttling.png"
+p "result-THR-no-enc.csv" u 1:2 w line title "no enc, sys", \
+   "result-THR-no-enc.csv" u 1:3 w line title "no enc, user", \
+   "result-THR-ENC.csv" u 1:2 w line title "ENC, sys", \
+   "result-THR-ENC.csv" u 1:3 w line title "ENC, user"
