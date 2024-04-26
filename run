@@ -1,0 +1,2 @@
+#! /bin/bash
+atop -PCPU -r alma.raw | python process.py
