@@ -20,10 +20,9 @@ collecting logs:
 time collect.sh -c irp871-c76 -l atop_blades
 ```
 
-stopping `atop` from cmux:
 signal 31 is SIGUSR2
 ```
-PP=$(ps aux | grep alma.raw | grep -v grep | tr -s ' ' | cut -d' ' -f2); echo $PP; kill -s 31 $PP
 # from cluster:
-exec.py -na 'PP=$(ps aux | grep alma.raw | grep -v grep | tr -s " " | cut -d" " -f2); echo $PP; kill -s 31 $PP'
+exec.py -na 'pkill -u ir atop --signal 31'
+# `-u ir` is needed, because there is another atop process running started by root
 ```
