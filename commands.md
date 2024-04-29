@@ -21,7 +21,9 @@ time collect.sh -c irp871-c76 -l atop_blades
 ```
 
 stopping `atop` from cmux:
-signal 12 is SIGUSR2
+signal 31 is SIGUSR2
 ```
-PP=$(ps aux | grep alma.raw | grep -v grep | tr -s ' ' | cut -d' ' -f2); echo $PP; kill -s 12 $PP
+PP=$(ps aux | grep alma.raw | grep -v grep | tr -s ' ' | cut -d' ' -f2); echo $PP; kill -s 31 $PP
+# from cluster:
+exec.py -na 'PP=$(ps aux | grep alma.raw | grep -v grep | tr -s " " | cut -d" " -f2); echo $PP; kill -s 31 $PP'
 ```
