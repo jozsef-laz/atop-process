@@ -29,9 +29,9 @@ for i in $(seq $NUM_OF_TESTRUNS); do
     echo "---> running fsstress <---"
     time sshpass -p welcome ssh $SSHARGS ir@irp871-c76h01 "/ir_test/tools/bld_linux/bin/fsstress \
         --config /ir_test/tools/bld_linux/fill_sim.cfg \
-        --duration 90 \
+        --duration 300 \
         --server 10.88.210.197 \
-        --timeout 180 \
+        --timeout 450 \
         --path /hedgehog/left,/hedgehog/right \
         --nfsdtype SIMULATION"
     retval_check $?
