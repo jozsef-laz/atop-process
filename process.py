@@ -22,7 +22,6 @@ def std_dev(numbers: list[int]) -> float:
     sqrs = [n*n for n in numbers]
     a = average(numbers)
     sa = average(sqrs)
-    print(f'a={a}, sa={sa}')
     return math.sqrt(sa - a*a)
 
 # dict: time -> list of samples
@@ -65,8 +64,8 @@ for line in sys.stdin:
 
 # creating average numbers
 startTimestamp = min(samples.keys())
+assert startTimestamp == 0
 averages: dict[int, Sample] = {}
-numOfBlades=len(next(iter(samples.values())))
 for timestamp, sampleList in samples.items():
     #l = ", ".join([str(s) for s in sampleList])
     #print(f"at timestamp {timestamp} we have [{len(sampleList)}] number of samples: {l}")
@@ -74,13 +73,62 @@ for timestamp, sampleList in samples.items():
     userticks = [sample.usertick for sample in sampleList]
     sample = Sample(average(systicks), average(userticks))
 
-    relativeTimestamp = timestamp-startTimestamp
     sample.set_std_dev(std_dev(systicks), std_dev(userticks))
 
-    averages[relativeTimestamp] = sample
+    averages[timestamp] = sample
 
 # write out average numbers to a csv
 with open("result.csv", "w") as f:
     f.write(f'# timestamp, systick, systick.std_dev, usertick, usertick.std_dev\n')
     for timestamp, sample in averages.items():
         f.write(f'{timestamp},{sample.systick},{sample.systick_std_dev},{sample.usertick},{sample.usertick_std_dev}\n')
+
+# integrating the measurements to get the area below the graph (time - tics)
+numOfSamples = 0 # number of samples we integrated together
+# timePeriodOfSamples = 5 # [sec] each sample was collected over this time period
+sysInt = 0
+userInt = 0
+for timestamp, sampleList in samples.items():
+    for sample in sampleList:
+        sysInt += sample.systick
+        userInt += sample.usertick
+        numOfSamples += 1
+
+# for now we calculate the values for the whole timePeriodOfSamples, not for 1 sec
+# averageSysTicksPerSec = float(sysInt) / numOfSamples / timePeriodOfSamples
+# averageUserTicksPerSec = float(userInt) / numOfSamples / timePeriodOfSamples
+averageSysTicks = float(sysInt) / numOfSamples
+averageUserTicks = float(userInt) / numOfSamples
+print(f'averageSysTicks={averageSysTicks}, averageUserTicks={averageUserTicks}')
+
+allSysTicks = [sample.systick for _, sampleList in samples.items() for sample in sampleList]
+allUserTicks = [sample.usertick for _, sampleList in samples.items() for sample in sampleList]
+stdDevSys = std_dev(allSysTicks)
+stdDevUser = std_dev(allUserTicks)
+print(f'stdDevSys={stdDevSys}, stdDevUser={stdDevUser}')
+
+# calculate integral again without outliers
+# outliers: those values which are further from average than 2 sigma
+numOfSamples = 0
+sysInt = 0
+userInt = 0
+for timestamp, sampleList in samples.items():
+    for sample in sampleList:
+        if abs(sample.systick - averageSysTicks) > 2*stdDevSys:
+            print(f'removing systick: <{timestamp}, {sample.systick}>')
+            continue
+        sysInt += sample.systick
+        numOfSamples += 1
+averageSysTicks = float(sysInt) / numOfSamples
+
+numOfSamples = 0
+for timestamp, sampleList in samples.items():
+    for sample in sampleList:
+        if abs(sample.usertick - averageUserTicks) > 2*stdDevUser:
+            print(f'removing usertick: <{timestamp}, {sample.usertick}>')
+            continue
+        userInt += sample.usertick
+        numOfSamples += 1
+averageUserTicks = float(userInt) / numOfSamples
+
+print(f'without outliers: averageSysTicks={averageSysTicks}, averageUserTicks={averageUserTicks}')
