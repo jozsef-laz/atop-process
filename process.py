@@ -115,7 +115,7 @@ userInt = 0
 for timestamp, sampleList in samples.items():
     for sample in sampleList:
         if abs(sample.systick - averageSysTicks) > 2*stdDevSys:
-            print(f'removing systick: <{timestamp}, {sample.systick}>')
+            # print(f'removing systick: <{timestamp}, {sample.systick}>')
             continue
         sysInt += sample.systick
         numOfSamples += 1
@@ -125,10 +125,11 @@ numOfSamples = 0
 for timestamp, sampleList in samples.items():
     for sample in sampleList:
         if abs(sample.usertick - averageUserTicks) > 2*stdDevUser:
-            print(f'removing usertick: <{timestamp}, {sample.usertick}>')
+            # print(f'removing usertick: <{timestamp}, {sample.usertick}>')
             continue
         userInt += sample.usertick
         numOfSamples += 1
 averageUserTicks = float(userInt) / numOfSamples
 
 print(f'without outliers: averageSysTicks={averageSysTicks}, averageUserTicks={averageUserTicks}')
+print(f'without outliers: averageSysPerc={averageSysTicks/5.0}, averageUserPerc={averageUserTicks/5.0}')
