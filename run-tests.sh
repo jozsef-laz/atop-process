@@ -1,8 +1,22 @@
 #! /bin/bash
-/home/ir/work/first/throttle 5
-/home/ir/work/first/encryption off
+
+throttle_cmd=/home/ir/work/second/throttle
+encryption_cmd=/home/ir/work/second/encryption
+
+# throttle off
+$throttle_cmd off
+$encryption_cmd off
 sleep 60
 time ./run-test.sh
-/home/ir/work/first/encryption on
+$encryption_cmd on
+sleep 60
+time ./run-test.sh
+
+# throttle
+$throttle_cmd 1500
+$encryption_cmd off
+sleep 60
+time ./run-test.sh
+$encryption_cmd on
 sleep 60
 time ./run-test.sh

@@ -1,13 +1,13 @@
 #! /bin/bash
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 LOGDIRS=(
-irp871-c76_2024-05-02-T18-04-38-no-thr-no-enc
-irp871-c76_2024-05-02-T18-37-12-no-thr-ENC
-irp871-c76_2024-05-02-T19-30-29-THR-no-enc
-irp871-c76_2024-05-02-T20-21-19-THR-ENC
+irp137-c21_2024-05-24-T13-39-59-no-thr-no-enc
+irp137-c21_2024-05-24-T14-15-58-no-thr-ENC
+irp137-c21_2024-05-24-T15-02-59-THR-no-enc
+irp137-c21_2024-05-24-T15-47-28-THR-ENC
 )
 for LOGDIR in ${LOGDIRS[@]}; do
-    cd $SCRIPT_DIR/$LOGDIR/irp871-c76
+    cd $SCRIPT_DIR/$LOGDIR/irp137-c21
     echo "---> processing LOGDIR=[$LOGDIR] <---"
 
     # making result.csv
